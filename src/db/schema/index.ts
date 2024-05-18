@@ -1,4 +1,5 @@
 import { relations } from "drizzle-orm";
+import { date, double, float } from "drizzle-orm/mysql-core";
 import {
   sqliteTable,
   text,
@@ -94,18 +95,40 @@ export const teamsRelations = relations(teams, ({ one }) => ({
   }),
 }));
 
-// export const plans = sqliteTable("plans", {
-// todo: add plans table schema
-// });
+export const plans = sqliteTable("plans",{
+  id: integer("id").primaryKey().notNull(),
+  name: text("name").notNull(),
+  price :integer("price").notNull(),
+  createdAt: timestamp("createdAt").notNull(),
+  updatedAt: timestamp("updatedAt").notNull(),
+});
 
-// export const subscriptions = sqliteTable("subscriptions", {
-//   // todo: add subscriptions table schema
-// });
+export const subscriptions = sqliteTable("subscriptions", {
+  id: integer("id").primaryKey().notNull(),
+  user_id: integer("user_id").notNull().references(() => users.id, { onDelete: "restrict", onUpdate: "restrict" }),
+  plan_id :integer("plan_id").notNull().references(() => plans.id, { onDelete: "restrict", onUpdate: "restrict" }),
+  start_date: text('start_date').notNull(),
+  end_date : text("end_date").notNull(),
+  status: text("status").notNull(),
+  createdAt: timestamp("createdAt").notNull(),
+  updatedAt: timestamp("updatedAt").notNull(),
+});
 
-// export const orders = sqliteTable("orders", {
-//   // todo: add orders table schema
-// });
+export const orders = sqliteTable("orders", {
+  // todo: add orders table schema
+  id: integer("id").primaryKey().notNull(),
+  subscription_id: integer("subscription_id").notNull().references(() => subscriptions.id, { onDelete: "restrict", onUpdate: "restrict" }),
+  amount: text("amount").notNull(),
+  createdAt: timestamp("createdAt").notNull(),
+  updatedAt: timestamp("updatedAt").notNull(),
 
-// export const subscriptionActivations = sqliteTable("subscriptionActivations", {
-//   // todo: add subscriptionActivations table schema
-// });
+});
+
+export const subscriptionActivations = sqliteTable("subscriptionActivations", {
+  // todo: add subscriptionActivations table schema
+  id: integer("id").primaryKey().notNull(),
+  subscription_id: integer("subscription_id").notNull().references(() => subscriptions.id, { onDelete: "restrict", onUpdate: "restrict" }),
+  activation_date: text("activation_date").notNull(),
+  createdAt: timestamp("createdAt").notNull(),
+  updatedAt: timestamp("updatedAt").notNull(),
+});

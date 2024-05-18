@@ -25,6 +25,7 @@
     // extra rules
     "noUncheckedIndexedAccess": true,
   },
+  
   "include": [
     "src/**/*"
   ],

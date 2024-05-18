@@ -6,7 +6,7 @@ export default async () => {
   //   console.log("🚫 Aborting for for non-development environment!");
   //   return;
   // }
-
+  
   const tablesFromKeys = Object.keys(schema)
     .reverse()
     .filter((x) => x.includes("Relations") === false);
@@ -18,7 +18,7 @@ export default async () => {
   await db.transaction(async (trx) => {
     await Promise.all(
       queries.map(async (query) => {
-        if (query) await trx.run(query);
+        if (query) trx.run(query);
       })
     );
   });

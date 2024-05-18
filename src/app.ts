@@ -15,7 +15,7 @@ const server = fastify({
   maxParamLength: 5000,
   logger: { level: "debug" },
 });
-server.addHook("onRoute", (opts) => {
+server.addHook("onRoute", (opts) => {  
   if (opts.path === "/health") {
     opts.logLevel = "silent";
   }
@@ -38,6 +38,7 @@ server.register(cors, {
 });
 
 type AppRouter = typeof appRouter;
+
 server.register(fastifyTRPCPlugin, {
   prefix: "/trpc",
   trpcOptions: {
@@ -57,6 +58,8 @@ server.register(healthRouter, { prefix: "/health" });
 
 const host = ENV_CONFIG.HOST;
 const port = ENV_CONFIG.PORT;
+console.log(port , "port");
+
 (async () => {
   try {
     // await startSqsConsumers();

@@ -50,7 +50,7 @@ export const auth = router({
           eq(schema.users.email, emailNormalized),
           eq(schema.users.emailVerified, true)
         ),
-      });
+      });      
       // check 404 and check if user has password set
       if (!user || !user.hashedPassword) {
         throw new trpcError({
@@ -80,20 +80,21 @@ export const auth = router({
         password: z.string(),
         timezone: z.string(),
         locale: z.string(),
+        isAdmin:z.boolean()
       })
     )
     .mutation(async ({ input }) => {
-      const { name, email, password, timezone, locale } = input;
+      const { name, email, password, timezone, locale , isAdmin } = input;
       const emailNormalized = email.toLowerCase();
       const user = await db.query.users.findFirst({
         where: eq(schema.users.email, emailNormalized),
-      });
+      });      
       // check 400
-      if (user) {
-        throw new trpcError({
-          code: "BAD_REQUEST",
-        });
-      }
+      // if (!user) {
+      //   throw new trpcError({
+      //     code: "BAD_REQUEST",
+      //   });
+      // }
       // hash password
       const hashedPassword = await bcryptjs.hash(password, salt);
       // create user
@@ -107,6 +108,7 @@ export const auth = router({
           hashedPassword,
           locale,
           timezone,
+          isAdmin
         })
         .returning();
       // create random otpCode

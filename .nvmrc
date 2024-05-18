@@ -1,1 +1,5 @@
 v20.11.0
+always-auth=true
+engine-strict=true
+shamefully-hoist=true
+enable-pre-post-scripts=true
